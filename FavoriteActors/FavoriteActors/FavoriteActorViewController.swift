@@ -19,7 +19,11 @@ class FavoriteActorViewController : UITableViewController, ActorPickerViewContro
         super.viewDidLoad()
         
         self.navigationItem.leftBarButtonItem = self.editButtonItem()
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: "addActor")        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: "addActor")
+        
+        // Added in Step-3.3 to initiate actor array from core data
+        actors = fetchAllActors()
+        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -44,6 +48,7 @@ class FavoriteActorViewController : UITableViewController, ActorPickerViewContro
      * the shared context. 
      */
     
+    // MARK : Added in Step-3.3
     func fetchAllActors() -> [Person] {
         
         // Create the Fetch Request
@@ -52,7 +57,8 @@ class FavoriteActorViewController : UITableViewController, ActorPickerViewContro
         // Execute the Fetch Request
         do {
             return try sharedContext.executeFetchRequest(fetchRequest) as! [Person]
-        } catch _ {
+        } catch let error as NSError {
+            print("Fetch request error : \(error)")
             return [Person]()
         }
     }
